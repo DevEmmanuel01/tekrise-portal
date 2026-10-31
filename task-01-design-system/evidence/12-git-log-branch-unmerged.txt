@@ -1,0 +1,16 @@
+=== GIT LOG ON MAIN (PROVING REGRESSION COMMIT WAS NEVER MERGED) ===
+* 267da60 (HEAD -> test/broken-token-regression) test(task-01): demonstrate broken token referencing when source primary-40 changes
+* 71ce543 test(task-01): demonstrate broken token referencing when source primary-40 changes
+* f71a4a8 (master) feat(task-01): add JSON-to-CSS token converter and tokenized student tuition screen
+* 69717f2 feat(task-01): add design system docs, Figma screenshots, and incomplete/complete token exports
+* c0ce2ea docs(task-01): add Tekrise Academy business brief and user profile
+* e17cb6e chore: initialize repository structure for Tekrise Academy portal
+
+=== GIT REFLOG (PROVING test/broken-token-regression BRANCH EXISTED AND WAS DISCARDED UNMERGED) ===
+267da60 HEAD@{0}: commit: test(task-01): demonstrate broken token referencing when source primary-40 changes
+71ce543 HEAD@{1}: commit: test(task-01): demonstrate broken token referencing when source primary-40 changes
+f71a4a8 HEAD@{2}: checkout: moving from master to test/broken-token-regression
+f71a4a8 HEAD@{3}: commit: feat(task-01): add JSON-to-CSS token converter and tokenized student tuition screen
+69717f2 HEAD@{4}: commit: feat(task-01): add design system docs, Figma screenshots, and incomplete/complete token exports
+c0ce2ea HEAD@{5}: commit: docs(task-01): add Tekrise Academy business brief and user profile
+e17cb6e HEAD@{6}: commit (initial): chore: initialize repository structure for Tekrise Academy portal
