@@ -1,0 +1,17 @@
+$ pwd
+/tmp/tekrise-nested-repro
+$ ls -la
+total 0
+drwxr-xr-x  3 gbolahan  wheel   96 Oct 31 22:25 .
+drwxrwxrwt 18 root      wheel  576 Oct 31 22:25 ..
+drwxr-xr-x  3 gbolahan  wheel   96 Oct 31 22:25 tekrise-app
+
+$ npm run dev
+npm error code ENOENT
+npm error syscall open
+npm error path /private/tmp/tekrise-nested-repro/package.json
+npm error errno -2
+npm error enoent Could not read package.json: Error: ENOENT: no such file or directory, open '/private/tmp/tekrise-nested-repro/package.json'
+npm error enoent This is related to npm not being able to find a file.
+npm error enoent
+npm error A complete log of this run can be found in: /Users/gbolahanadekola/.npm/_logs/2026-10-31T21_27_11_892Z-debug-0.log

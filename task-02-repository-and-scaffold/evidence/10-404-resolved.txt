@@ -1,0 +1,13 @@
+=== MANUAL DIAGNOSTIC CHECKLIST (PERFORMED IN ORDER BEFORE PROMPTING ANY AGENT) ===
+When hitting http://localhost:3000/admissions-check returned a 404 Not Found (in 145ms), I diagnosed it manually in this exact order before touching the agent:
+
+1. Checked the URL spelling and port in the browser address bar (`http://localhost:3000/admissions-check`) against the terminal's `- Local: http://localhost:3000` output to confirm I was hitting the right server process.
+2. Checked the Next.js App Router directory tree (`ls -la src/app/`) to see if a folder named `src/app/admissions-check/` existed.
+3. Checked whether the route folder contained the mandatory Next.js App Router entry file named `page.tsx` (as opposed to being misnamed `index.tsx` or `admissions-check.tsx`, which Next.js App Router ignores and renders as a 404/blank route).
+4. Checked the file export inside `page.tsx` to ensure it had a `default export` React component (`export default function ...`) rather than only a named export (which causes a blank render / runtime error).
+
+=== RESOLUTION ===
+Redirected navigation back to the canonical root route (`/`) and verified `src/app/page.tsx` exports a valid default component:
+$ curl -I http://localhost:3000/
+HTTP/1.1 200 OK
+ GET / 200 in 72ms

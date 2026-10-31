@@ -1,0 +1,8 @@
+$ PORT=3000 node -e "const http = require('http'); const s = http.createServer(); s.listen(3000);"
+
+=== INSPECTING WHICH PROCESS ID (PID) IS HOLDING PORT 3000 ===
+$ lsof -i :3000
+COMMAND     PID            USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+node      17370 gbolahanadekola   17u  IPv6 0x76060e642e5e0d9b      0t0  TCP *:hbci (LISTEN)
+node      17370 gbolahanadekola   32u  IPv6 0x1397fcb04c5d8ec3      0t0  TCP localhost:hbci->localhost:54366 (ESTABLISHED)
+Microsoft 68167 gbolahanadekola   29u  IPv6 0xe6796b305b6b53b4      0t0  TCP localhost:54366->localhost:hbci (ESTABLISHED)

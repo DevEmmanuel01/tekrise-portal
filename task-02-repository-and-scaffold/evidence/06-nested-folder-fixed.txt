@@ -1,0 +1,27 @@
+=== FIX METHOD A: Changing Directory Into the Nested Folder (cd tekrise-app) ===
+$ cd tekrise-app && pwd
+/tmp/tekrise-nested-repro/tekrise-app
+$ ls package.json
+package.json
+
+=== FIX METHOD B: Instructing the Agent to Rescaffold / Flatten In-Place Into Repository Root ===
+Prompt given to Agent:
+"You scaffolded the Next.js app inside a nested subfolder instead of the repository root, causing `npm run dev` to fail with ENOENT on package.json. Move all project files (`package.json`, `src/`, `prisma/`, `next.config.*`, `tsconfig.json`) directly into the repository root (`.`) and remove the redundant nested folder."
+
+Verification in Repository Root after In-Place Fix:
+$ pwd
+/Users/gbolahanadekola/tekrise-portal
+-rw-r--r--@ 1 gbolahanadekola  staff  544 Oct 31 22:05 package.json
+
+prisma:
+total 8
+drwxr-xr-x@  3 gbolahanadekola  staff    96 Oct 31 21:58 .
+drwxr-xr-x  21 gbolahanadekola  staff   672 Oct 31 22:04 ..
+-rw-r--r--@  1 gbolahanadekola  staff  2222 Oct 31 22:05 schema.prisma
+
+src:
+total 0
+drwxr-xr-x@  4 gbolahanadekola  staff  128 Oct 31 22:00 .
+drwxr-xr-x  21 gbolahanadekola  staff  672 Oct 31 22:04 ..
+drwxr-xr-x@  6 gbolahanadekola  staff  192 Oct 31 22:00 app
+drwxr-xr-x@  3 gbolahanadekola  staff   96 Oct 31 21:59 lib
