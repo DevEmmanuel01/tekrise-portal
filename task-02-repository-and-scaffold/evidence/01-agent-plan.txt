@@ -1,0 +1,60 @@
+Analyzed README.md:L1-3
+Analyzing README.md
+Analyzing README.md
+Analyzed tokens.css:L1-50
+
+### 1. Summary of Understanding
+
+#### The Business
+* **Organization**: **Tekrise Academy** is an intensive technology training institute based in **Ibadan, Oyo State, Nigeria**, running 12-to-16-week cohorts in Product Design, Data Analytics, and Full-Stack Software Engineering via hybrid physical classes (at the Ibadan hub) and live online sessions.
+* **Target Audience**: 19-to-32-year-old aspiring tech professionals in Ibadan and South-West Nigeria accessing the portal on mid-range Android devices over fluctuating 3G/4G or shared hub Wi-Fi, as well as on Windows laptops during campus lab hours. Admissions & front-desk coordinators represent secondary internal users.
+* **Core Value & Tone**: The interface must feel **structured, authoritative, and calm—like a modern academic registrar paired with a reliable fintech ledger**. It addresses three key student questions:
+  1. Outstanding second tuition installment balance and exact payment cut-off date before portal and physical hub access are paused.
+  2. Ibadan hub physical lab power/generator hours and mentor office hours for the cohort.
+  3. Hub attendance check-in and project milestone progress against the mandatory 80% graduation certification threshold.
+
+#### The Stack
+* **Framework**: Next.js (App Router, React 19 / 18, TypeScript).
+* **Database & ORM**: PostgreSQL with Prisma ORM (`prisma/schema.prisma`).
+* **Design & Styling**: Strict consumption of `tokens.css` with CSS custom properties (`--color-*`, `--shadow-*`) and 15 typographic utility classes (`.type-display-lg` through `.type-label-sm`, with `.tabular-nums`).
+
+#### Core Constraints
+* **Design Tokens as Single Source of Truth**: `tokens.css` is imported into the global stylesheet. Interface styles must **never** use raw hex codes (`#...`), `rgb()`, `rgba()`, `hsl()`, `hsla()`, primitive `--ref-*` variables, or ad-hoc `font-size`/`font-weight`/`line-height`. Only semantic variables (`--color-*`), typography classes (`.type-*`), and shadow tokens (`--shadow-*`) are permitted.
+* **Foundation Only (Zero Scope Creep)**: Only project scaffolding, Prisma setup, and a minimal, responsive home screen at `src/app/page.tsx` introducing Tekrise Academy Ibadan. No authentication, student dashboards, payment flows, or admin consoles.
+
+---
+
+### 2. Ambiguity & Clarification Questions (Escape Hatch)
+
+Before executing commands, please clarify two structural details:
+
+1. **Target Directory for Scaffolding**:
+   Should the Next.js project be initialized directly at the **repository root** (`/Users/gbolahanadekola/tekrise-portal/`) or isolated inside the **`task-02-repository-and-scaffold/`** directory?
+2. **Prisma Initial Models**:
+   For the foundation-only requirement, should `prisma/schema.prisma` contain just the initial provider/datasource block (`postgresql`), or would you like minimal baseline model stubs for `Student`, `Cohort`, and `TuitionRecord` reflecting the business brief?
+3. **Database Connection String**:
+   For local environment configuration (`.env.example` / `.env`), should we configure a standard default local PostgreSQL URL (e.g. `postgresql://postgres:postgres@localhost:5432/tekrise_portal?schema=public`)?
+
+---
+
+### 3. Step-by-Step Scaffolding Plan
+
+Once you provide explicit approval and clarify the items above, the execution will proceed as follows:
+
+1. **Initialize Project Scaffolding**:
+   * Scaffold Next.js with TypeScript and App Router (`src/` directory layout).
+   * Configure `package.json`, `tsconfig.json`, and ESLint/Next configs.
+2. **Integrate Design System Tokens**:
+   * Copy or symlink `task-01-design-system/tokens.css` into the project (`src/app/tokens.css` or global styles root).
+   * Create `src/app/globals.css` that imports `tokens.css`, sets up CSS resets, and applies base theme custom properties using strictly semantic tokens (`--color-surface`, `--color-on-surface`, etc.).
+3. **Configure Prisma & PostgreSQL**:
+   * Install and initialize Prisma (`@prisma/client`, `prisma`).
+   * Configure `prisma/schema.prisma` with `postgresql` datasource provider.
+   * Provide `.env.example` and standard Prisma client singleton utility (`src/lib/prisma.ts`).
+4. **Build Minimal Home Screen (`src/app/page.tsx`)**:
+   * Create a clean, authoritative landing page introducing Tekrise Academy Ibadan, its physical hub schedule, cohort tracks, and registrar notice.
+   * Apply strictly `.type-*` classes and semantic `--color-*` / `--shadow-*` variables with zero hardcoded colors or ad-hoc typography rules.
+5. **Inventory, Assumptions & Line-by-Line Self-Audit**:
+   * Deliver the full inventory of created files and explicit assumptions made.
+   * Complete the line-by-line self-audit against Rules 1 through 7.
+
