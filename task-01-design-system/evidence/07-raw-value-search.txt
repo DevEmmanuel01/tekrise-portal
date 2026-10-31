@@ -1,0 +1,2 @@
+$ grep -rnE '(#[0-9a-fA-F]{3,8}|rgba?\(|hsla?\()' task-01-design-system/index.html task-01-design-system/styles.css
+Exit code 1: 0 matches found in index.html and styles.css (all colours reference semantic tokens in tokens.css).
