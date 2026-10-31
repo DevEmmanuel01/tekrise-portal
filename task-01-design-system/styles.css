@@ -364,7 +364,7 @@ body {
    Tuition Ledger & Balance Card
    ========================================================================== */
 .tuition-card {
-  border-top: 4px solid var(--color-primary);
+  border-top: 4px solid #00E676;
 }
 
 .balance-showcase {
