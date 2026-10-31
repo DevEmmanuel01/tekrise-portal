@@ -1,0 +1,97 @@
+### Question Asked to Agent:
+Inspect task-01-design-system/index.html and styles.css right now. Which exact typography style from our 15-style scale did you apply to: (1) the primary "Pay Second Installment" CTA button, (2) the Naira tuition balance figure, and (3) the main page heading? Did you hardcode any font-size, font-weight, or line-height values on those elements instead of using the token classes? Answer honestly and quote the exact lines.
+
+### Agent's Verbatim Response:
+Ran find CTA button in index.html
+Ran find btn-pay-installment in styles.css
+Ran find balance-naira-amount in index.html
+Ran find balance-naira-amount in styles.css
+Ran find page-title in index.html
+Ran find page-title in styles.css
+Ran check for any hardcoded font properties in styles.css · Exited with code 1
+Checked task Check for any hardcoded font properties in styles.css
+Ran verify 0 font property occurrences in styles.css
+Ran check inline style attributes in index.html
+
+Here is the exact inspection of [`index.html`](file:///Users/gbolahanadekola/tekrise-portal/task-01-design-system/index.html) and [`styles.css`](file:///Users/gbolahanadekola/tekrise-portal/task-01-design-system/styles.css):
+
+---
+
+### 1. Primary "Pay Installment" CTA Button
+* **Applied Typography Style**: **`.type-label-lg`** (`14px` / `0.875rem`, weight `600`, line-height `20px` / `1.25rem`, letter-spacing `+0.01em`)
+* **Hardcoded font properties**: **None.** (Zero `font-size`, `font-weight`, or `line-height` declarations exist on this element or rule).
+* **Exact Quoted Lines**:
+  * [`index.html#L159-L164`](file:///Users/gbolahanadekola/tekrise-portal/task-01-design-system/index.html#L159-L164):
+    ```html
+    <button type="button" class="btn-pay-installment type-label-lg">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+      </svg>
+      Pay Installment
+    </button>
+    ```
+  * [`styles.css#L442-L457`](file:///Users/gbolahanadekola/tekrise-portal/task-01-design-system/styles.css#L442-L457):
+    ```css
+    .btn-pay-installment {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.65rem;
+      width: 100%;
+      padding: 0.875rem 1.5rem;
+      background-color: var(--color-primary);
+      color: var(--color-on-primary);
+      border: 1px solid var(--color-outline-variant);
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: var(--shadow-medium);
+      text-decoration: none;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    ```
+
+---
+
+### 2. Naira Tuition Balance Figure (`₦180,000`)
+* **Applied Typography Style**: **`.type-display-sm`** (`36px` / `2.25rem`, weight `600`, line-height `50px` / `3.125rem`, letter-spacing `-0.015em`) along with **`.tabular-nums`**
+* **Hardcoded font properties**: **None.** (Zero `font-size`, `font-weight`, or `line-height` declarations).
+* **Exact Quoted Lines**:
+  * [`index.html#L135-L137`](file:///Users/gbolahanadekola/tekrise-portal/task-01-design-system/index.html#L135-L137):
+    ```html
+    <div class="balance-naira-amount type-display-sm tabular-nums">
+      <span>₦180,000</span>
+    </div>
+    ```
+  * [`styles.css#L380-L386`](file:///Users/gbolahanadekola/tekrise-portal/task-01-design-system/styles.css#L380-L386):
+    ```css
+    .balance-naira-amount {
+      color: var(--color-on-surface);
+      letter-spacing: var(--type-display-sm-letter-spacing);
+      display: flex;
+      align-items: baseline;
+      gap: 0.25rem;
+    }
+    ```
+
+---
+
+### 3. Main Page Heading ("Student Tuition & Cohort Standing")
+* **Applied Typography Style**: **`.type-headline-lg`** (`32px` / `2.0rem`, weight `600`, line-height `45px` / `2.8125rem`, letter-spacing `-0.015em`)
+* **Hardcoded font properties**: **None.** (Zero `font-size`, `font-weight`, or `line-height` declarations).
+* **Exact Quoted Lines**:
+  * [`index.html#L52`](file:///Users/gbolahanadekola/tekrise-portal/task-01-design-system/index.html#L52):
+    ```html
+    <h1 class="page-title type-headline-lg">Student Tuition &amp; Cohort Standing</h1>
+    ```
+  * [`styles.css#L160-L163`](file:///Users/gbolahanadekola/tekrise-portal/task-01-design-system/styles.css#L160-L163):
+    ```css
+    .page-title {
+      color: var(--color-on-surface);
+      margin-bottom: 0.35rem;
+    }
+    ```
+
+---
+
+### Verification Summary
+There are **zero hardcoded instances** of `font-size`, `font-weight`, or `line-height` across the entire [`styles.css`](file:///Users/gbolahanadekola/tekrise-portal/task-01-design-system/styles.css) file and **zero inline styles** in [`index.html`](file:///Users/gbolahanadekola/tekrise-portal/task-01-design-system/index.html). Every typographic property is governed strictly by the `.type-*` utility classes defined in [`tokens.css`](file:///Users/gbolahanadekola/tekrise-portal/task-01-design-system/tokens.css).
