@@ -1,0 +1,7 @@
+src/app/login/page.tsx
+src/app/page.tsx
+src/app/reset-password/page.tsx
+src/app/signup/page.tsx
+src/app/tracks/page.tsx
+
+Agent Page Count Audit (Before Collapse): 5 pages total (/, /tracks, /signup, /login, /reset-password).

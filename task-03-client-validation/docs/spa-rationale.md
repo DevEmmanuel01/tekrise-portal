@@ -1,0 +1,12 @@
+# Task 3 Step 1: Single-Page Authentication Architecture Rationale (`spa-rationale.md`)
+
+## 1. What the User Experience Was Before (Separate Routes)
+Before collapsing our authentication pages (`evidence/01-page-count-before.txt`), Registration (`/signup`), Sign-In (`/login`), and Password Reset (`/reset-password`) lived on three separate Next.js route files. When a Tekrise Academy student in Ibadan on a high-latency 3G mobile connection clicked "Student Login" from the registration screen, the browser tore down the current DOM tree, made a network round-trip for the new route bundle, and lost any email address they had already typed into the input field.
+
+## 2. Why Instant Form Switching via URL Query Parameters Matters
+By collapsing all three flows into `/auth` (`src/app/auth/page.tsx`, `evidence/02-page-count-after.txt`) and driving the active view via the `?mode=signup|login|reset` query parameter (`evidence/03-url-states.png`), switching forms happens in `< 1ms` in browser memory using `window.history.pushState`. As verified in `evidence/04-form-switch-logs.txt`, switching between Registration, Login, and Reset generates **zero additional HTTP `GET` requests** or server sessions. Better yet, because they share the same parent component state, an email typed on the Login tab is immediately preserved if the student switches to Reset Access, and each mode remains deep-linkable and bookmarkable via its URL query string.
+
+## 3. Where Separate Multi-Page Routes Would Be the Better Choice
+Single-page conditional rendering is **not** universally superior. Separate routes (`/signup` vs. `/login`) are the better engineering choice when:
+1. **Heavy, Asymmetric Dependencies:** The registration flow requires loading large third-party SDKs (such as a biometric KYC webcam verifier, Paystack checkout iframe, or document uploader) that returning users logging in on `/login` should never pay the bandwidth cost to download.
+2. **Strict Server-Level Access & Rate-Limit Segregation:** When an enterprise Web Application Firewall (WAF) or reverse proxy (Cloudflare/Nginx) applies different rate-limiting rules, caching headers, or Content Security Policies (CSP) by URL path rather than query string.
