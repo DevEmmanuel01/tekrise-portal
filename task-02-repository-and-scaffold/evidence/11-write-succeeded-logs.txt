@@ -1,0 +1,7 @@
+prisma:query INSERT INTO "public"."admission_enquiries" ("id","fullName","email","track","createdAt") VALUES ($1,$2,$3,$4,$5) RETURNING "public"."admission_enquiries"."id", "public"."admission_enquiries"."fullName", "public"."admission_enquiries"."email", "public"."admission_enquiries"."track", "public"."admission_enquiries"."createdAt"
+[POST /api/enquiries] 201 Created — Row ID: cmvx24djh0000sbzbe7aetrl3 at 2026-10-31T23:53:29.758Z
+ POST /api/enquiries 201 in 1446ms
+prisma:query SELECT 1
+prisma:query INSERT INTO "public"."admission_enquiries" ("id","fullName","email","track","createdAt") VALUES ($1,$2,$3,$4,$5) RETURNING "public"."admission_enquiries"."id", "public"."admission_enquiries"."fullName", "public"."admission_enquiries"."email", "public"."admission_enquiries"."track", "public"."admission_enquiries"."createdAt"
+[POST /api/enquiries] 201 Created — Row ID: cmvx25dq60001sbzbj7wq4i3d at 2026-10-31T23:54:16.641Z
+ POST /api/enquiries 201 in 28ms

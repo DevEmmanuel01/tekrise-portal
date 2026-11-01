@@ -1,0 +1,27 @@
+prisma:error 
+Invalid `prisma.admissionEnquiry.create()` invocation:
+
+
+Can't reach database server at `localhost:9999`
+
+Please make sure your database server is running at `localhost:9999`.
+[POST /api/enquiries] Error creating admission enquiry: Error [PrismaClientInitializationError]: 
+Invalid `prisma.admissionEnquiry.create()` invocation:
+
+
+Can't reach database server at `localhost:9999`
+
+Please make sure your database server is running at `localhost:9999`.
+    at async POST (src/app/api/enquiries/route.ts:16:21)
+  14 |     }
+  15 |
+> 16 |     const enquiry = await prisma.admissionEnquiry.create({
+     |                     ^
+  17 |       data: {
+  18 |         fullName: String(fullName).trim(),
+  19 |         email: String(email).trim().toLowerCase(), {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined
+}
+ POST /api/enquiries 500 in 534ms

@@ -1,0 +1,71 @@
+// Prisma schema for Tekrise Academy Student & Admissions Portal
+// Single source of truth for database models
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Cohort {
+  id          String    @id @default(cuid())
+  code        String    @unique // e.g. "Cohort 04"
+  track       String    // e.g. "Full-Stack Software Engineering", "Product Design", "Data Analytics"
+  term        String    // e.g. "Quarter 2, 2026"
+  startDate   DateTime
+  endDate     DateTime
+  isActive    Boolean   @default(true)
+  students    Student[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("cohorts")
+}
+
+model Student {
+  id              String          @id @default(cuid())
+  matricPin       String          @unique // 5-digit Admissions PIN
+  studentId       String          @unique // e.g. "TR-2026-0482"
+  fullName        String
+  email           String          @unique
+  cohortId        String
+  cohort          Cohort          @relation(fields: [cohortId], references: [id], onDelete: Restrict)
+  attendanceRate  Float           @default(0.0) // 0-100% (80% threshold required for certification)
+  milestoneScore  Float           @default(0.0) // 0-100% (80% passing standard)
+  hubAccessActive Boolean         @default(true)
+  tuitionRecords  TuitionRecord[]
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@map("students")
+}
+
+model TuitionRecord {
+  id                      String   @id @default(cuid())
+  studentId               String
+  student                 Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  totalTuition            Decimal  @db.Decimal(12, 2) // e.g. 360000.00
+  firstInstallmentPaid    Decimal  @db.Decimal(12, 2) // e.g. 180000.00
+  secondInstallmentAmount Decimal  @db.Decimal(12, 2) // e.g. 180000.00
+  isSecondInstallmentPaid Boolean  @default(false)
+  secondInstallmentDue    DateTime
+  status                  String   @default("PENDING") // PENDING, PAID, OVERDUE
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  @@map("tuition_records")
+}
+
+model AdmissionEnquiry {
+  id        String   @id @default(cuid())
+  fullName  String
+  email     String
+  track     String
+  createdAt DateTime @default(now())
+
+  @@map("admission_enquiries")
+}
+

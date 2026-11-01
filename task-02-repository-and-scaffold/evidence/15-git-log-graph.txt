@@ -1,0 +1,19 @@
+* 636970a (experiment/raw-sql-polling-abandoned) experiment(abandoned): test client polling concept (left unmerged off main)
+*   a0a249e (HEAD -> main) Merge branch 'feat/campus-metadata-route' into main
+|\  
+| * 106b29b (feat/campus-metadata-route) feat(campus): add structured Ibadan campus operational metadata constant
+|/  
+* 64783f4 docs(task-02): add working-tree git architecture guide
+* 7c892ab docs(task-02): add .env.example and cold-start readme docs
+* c2d178d (test/broken-token-regression) test(task-02): capture and resolve nested folder, port 3000 PID conflict, and 404 route errors
+* 75c8876 feat(task-02): complete Next.js scaffold and record 2033ms cold / 72ms warm load metrics
+* 29537e3 docs(task-02): add initial and tightened scaffolding prompts with 8-point guardrails
+* a47fe84 evidence(task-01): add agent typography interrogation answer file
+* 1db4dfb fix(task-01): separate prompts.md and defects.md into independent files
+* db02cca docs(task-01): complete prompts log, defects, 12 interview answers, and regression evidence
+* 267da60 test(task-01): demonstrate broken token referencing when source primary-40 changes
+* 71ce543 test(task-01): demonstrate broken token referencing when source primary-40 changes
+* f71a4a8 (master) feat(task-01): add JSON-to-CSS token converter and tokenized student tuition screen
+* 69717f2 feat(task-01): add design system docs, Figma screenshots, and incomplete/complete token exports
+* c0ce2ea docs(task-01): add Tekrise Academy business brief and user profile
+* e17cb6e chore: initialize repository structure for Tekrise Academy portal
