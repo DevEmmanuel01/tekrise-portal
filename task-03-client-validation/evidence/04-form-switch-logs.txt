@@ -1,0 +1,22 @@
+> tekrise-portal@0.1.0 dev
+> next dev
+
+   ▲ Next.js 15.5.28
+   - Local:        http://localhost:3000
+   - Network:      http://127.0.2.2:3000
+   - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 2.2s
+ ○ Compiling / ...
+ ✓ Compiled / in 1902ms (573 modules)
+ GET / 200 in 2178ms
+ ✓ Compiled /auth in 457ms (611 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /auth?mode=signup 200 in 709ms
+ GET /auth?mode=signup 200 in 87ms
+
+ --- Form Switching Verification ---
+1. Initial navigation: GET /auth?mode=signup 200
+2. Switched to ?mode=login via window.history.pushState -> 0 HTTP GET requests / 0 server sessions created.
+3. Switched to ?mode=reset via window.history.pushState -> 0 HTTP GET requests / 0 server sessions created.
