@@ -419,7 +419,7 @@ function AuthPortalContent() {
                                             setMatricPin(digitsOnly);
                                         }}
                                         onBlur={() => markTouched("matricPin")}
-                                        placeholder="Enter PIN from your tuition receipt"
+                                        placeholder="Enter PIN from your tuition receipt e.g. 5-digit PIN (12345)"
                                         className="form-input type-body-md tabular-nums"
                                         style={{
                                             borderColor:
@@ -609,7 +609,8 @@ function AuthPortalContent() {
                             </div>
                         )}
 
-                        {/* Step 7: Submit Button (Hidden version vs. Visible Disabled version) */}
+
+                        {/* Step 7: Submit Button (Hidden version vs. Visible Accessible aria-disabled version) */}
                         {useHiddenButtonVersion ? (
                             isCurrentFormValid && (
                                 <button type="submit" className="form-btn-submit type-label-lg">
@@ -617,15 +618,17 @@ function AuthPortalContent() {
                                 </button>
                             )
                         ) : (
-                            <div
-                                onClick={handleDisabledAreaClick}
-                                style={{ display: "inline-block", alignSelf: "flex-start" }}
-                            >
+                            <div style={{ display: "inline-block", alignSelf: "flex-start" }}>
                                 <button
                                     type="submit"
-                                    disabled={!isCurrentFormValid || isSubmitting}
                                     aria-disabled={!isCurrentFormValid || isSubmitting}
                                     aria-describedby={!isCurrentFormValid ? "submit-disabled-reason" : undefined}
+                                    onClick={(e) => {
+                                        if (!isCurrentFormValid || isSubmitting) {
+                                            e.preventDefault();
+                                            handleDisabledAreaClick();
+                                        }
+                                    }}
                                     className="form-btn-submit type-label-lg"
                                     style={{
                                         opacity: !isCurrentFormValid ? 0.55 : 1,
