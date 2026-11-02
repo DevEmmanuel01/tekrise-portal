@@ -44,3 +44,17 @@ Every validation rule below was derived specifically for **Tekrise Academy (Ring
 * **What goes wrong without it:** Students could register without an assigned curriculum track or without legally binding NDPA 2023 privacy and 80% attendance policy consent.
 * **What legitimate user it wrongly blocks (The Trade-Off):**
   1. **Dual-Track / Custom Corporate Trainees:** A student who paid to audit two tracks simultaneously or a corporate trainee seeking a custom 4-week module cannot express that selection and is forced into a single standard cohort track.
+
+  ---
+
+## 6. Step 7 Justifications: Password Design & Submit Button State
+
+### A. Why We Chose a 10-Character Minimum Length (Length Beats Complexity)
+We set our minimum password length to **10 non-whitespace characters** (`password.trim().length >= 10`) without forcing arbitrary symbol/uppercase composition rules. Under NIST SP 800-63B guidelines, length increases entropy exponentially ($95^{10} \approx 5.9 \times 10^{19}$ possibilities across printable ASCII), whereas forcing 8-character complexity rules leads students to pick predictable patterns like `Ibadan26!` that cracking dictionaries guess in seconds. Because Tekrise Academy portals store tuition payment receipts (`₦150,000`–`₦350,000`), 10 characters provides strong resistance against offline brute-force attacks while remaining easy for students to type on mobile keyboards, and the length counter (`#password-requirements`) only appears once the student begins typing (`password.length > 0`).
+
+### B. Visibility Toggle (`Show/Hide`) vs. Confirm Password Field
+We implemented a **`Show / Hide` password visibility toggle button** (`aria-label="Show password text"`) rather than a second "Confirm Password" input field. On mobile connections in Ibadan, a `Show / Hide` toggle lets students visually inspect their password in place without doubling typing effort or increasing vertical form height, whereas a "Confirm Password" field often pushes users to copy-paste their first entry (carrying over the exact same typo or trailing space).
+* **Why a Confirm Password Field Would Be Better in a Stricter Industry:** In high-security physical environments—such as banking halls, clinical workstations, or shared public cybercafés where shoulder-surfing or overhead CCTV cameras can capture plaintext screens—unmasking a secret via a `Show` toggle exposes the credential visually to bystanders. In those stricter industries (or when entering unmasked financial account numbers/wire routing codes), forcing the user to type the masked string twice into a Confirm field verifies muscle-memory accuracy without ever rendering plaintext characters on screen.
+
+### C. Why the Visible-but-Disabled Button (`14`) Is Better Than the Hidden Button (`13`) (Two Sentences)
+Hiding the submit button until every field is valid (`evidence/13-button-hidden-version.png`) removes the primary visual anchor that tells a user how to complete the form, leaving someone who missed a single required field or screen-reader cue staring at a dead-end card with no call to action. Showing the button in a visibly disabled state (`aria-disabled="true"`, `evidence/14-button-disabled-version.png`) preserves the expected mental model of a form and gives users an interactive target that actively explains what is still missing (`"Action blocked: You must read and accept the Tekrise Academy Cohort 04 Terms..."`) when clicked.
