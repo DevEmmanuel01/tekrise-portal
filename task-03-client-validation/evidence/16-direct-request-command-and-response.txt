@@ -1,0 +1,10 @@
+$ curl -i -X POST http://localhost:3000/api/enquiries -H "Content-Type: application/json" -d '{"fullName":"a","email":"a@b","track":"Bypassed-Via-Curl-Attack"}'
+HTTP/1.1 201 Created
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Mon, 02 Nov 2026 10:23:16 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"id":"cmvz424l900000elr7zzili5t","fullName":"a","email":"a@b","track":"Bypassed-Via-Curl-Attack","createdAt":"2026-11-02T10:23:16.412Z"}

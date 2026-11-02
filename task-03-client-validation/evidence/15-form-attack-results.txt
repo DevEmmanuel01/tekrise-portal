@@ -1,0 +1,37 @@
+=== TASK 3 STEP 8 (PART 1): BROWSER UI FORM ATTACK LOG ===
+Target Route: http://localhost:3000/auth?mode=signup
+Component Under Test: src/app/auth/page.tsx
+
+[Test 1: Single-Character Name ("a")]
+- Input: fullName = "a"
+- Result: BLOCKED by client UI.
+- Inline Error Triggered: "⚠ Full name must be between 4 and 70 characters long."
+- Submit Button State: aria-disabled="true"
+
+[Test 2: Single-Token Bot Name ("test")]
+- Input: fullName = "test"
+- Result: BLOCKED by client UI.
+- Inline Error Triggered: "⚠ Enter both your first name and surname for official certificate issuance (minimum 2 characters each)."
+
+[Test 3: Password of 12 Blank Spaces ("            ")]
+- Input: password = "            " (12 spaces)
+- Result: BLOCKED by client UI.
+- Mechanism: password.trim().length evaluates to 0/10 characters.
+- Inline Error Triggered: "⚠ Password must be at least 10 non-space characters long."
+
+[Test 4: Domain-less Email ("a@b")]
+- Input: email = "a@b"
+- Result: BLOCKED in real-time by client UI.
+- Inline Error Triggered: "⚠ Enter a properly formatted email address containing an '@' symbol and domain (e.g. student@tekrise.ng)."
+
+[Test 5: Pasted Fields With Leading/Trailing Whitespace & Maximum Length (>70 chars)]
+- Input A: fullName = "   Oluwaseun   Adeleke   " -> Normalized cleanly via .trim().replace(/\s+/g, " ") to "Oluwaseun Adeleke".
+- Input B: fullName = 82-character string -> BLOCKED ("⚠ Full name must be between 4 and 70 characters long.").
+
+[Test 6: WHAT GOT THROUGH THE FORM UI (Semantic & DevTools Bypass)]
+- Attack A (Synthetic Minimal Payload):
+  Entered fullName = "Aa Bb", email = "a@b.co", matricPin = "99999", password = "aaaaaaaaaa" (10 'a's), and ticked acceptedTerms.
+  -> GOT THROUGH THE FORM! Because "Aa Bb" has two 2-letter tokens and "99999" has 5 digits, client-side regexes passed it, sending POST /api/enquiries and returning HTTP 201 Created.
+- Attack B (DOM Inspection / Custom Track Injection):
+  Opened Chrome DevTools Elements panel, changed <option value="Full-Stack Software Engineering"> to <option value="Hacked Free Scholarship Track">, and submitted.
+  -> GOT THROUGH THE FORM! The browser submitted the mutated <select> value straight to POST /api/enquiries because client-side DOM state lives entirely under the user's control.
