@@ -1,0 +1,7 @@
+=== TASK 4 STEP 4.1: HASHING THE SAME PASSWORD TWICE (ARGON2ID) ===
+Plaintext Input : TekriseIbadanCohort04!
+Argon2id Hash 1 : $argon2id$v=19$m=65536,t=3,p=1$IN0WSXt/RPWleiVaA27gOQ$eFXxorChkl2iisZu3wnzdulcKarZRqHrBYcHwHHT8Ik
+Argon2id Hash 2 : $argon2id$v=19$m=65536,t=3,p=1$H3w5u9EE9bMlFto3NTQ4lQ$MbxX887+2tHZRYtucjFibiWOeeViHGPcA1KeVxQ6V7s
+Are outputs identical? : false
+
+One-Line Explanation: Both outputs differ completely because Argon2id automatically generates a unique, cryptographically random 16-byte salt for every invocation and mixes it with the password before hashing, ensuring identical passwords never produce identical hashes.

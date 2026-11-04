@@ -1,0 +1,12 @@
+=== TASK 4 STEP 4.2 & 4.3: HARDWARE BENCHMARK & ARITHMETIC (MACBOOK PRO) ===
+Timestamp                              : 2026-11-04T15:45:46.283Z
+Platform / Architecture                : darwin arm64 Node v24.18.0
+----------------------------------------------------------------------------
+1. Argon2id (m=64MB, t=3, p=1) Time    : 101.696 ms ( 101696375 ns )
+2. SHA-256 Single Call Time            : 0.04483 ms ( 44833 ns )
+3. SHA-256 Average Time (10k runs)     : 0.001140 ms ( 1140 ns )
+----------------------------------------------------------------------------
+ARITHMETIC (Guesses Per Second on Single CPU Core):
+- Argon2id Guesses/sec = 1000 ms / 101.696 ms = 9.83 guesses/sec
+- SHA-256 Guesses/sec  = 1000 ms / 0.001140 ms = 877,129 guesses/sec
+- Cost Ratio (Slowdown Factor)         : 89,201x slower per attempt (plus 64 MB RAM lock)
