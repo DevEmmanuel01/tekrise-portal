@@ -1,0 +1,34 @@
+================================================================================
+TASK 4 STEP 7: SIDE-BY-SIDE COMPARISON OF DIRECT ENDPOINT ATTACK (TASK 3 vs TASK 4)
+================================================================================
+
+1. THE EXACT DIRECT REQUEST SENT (BYPASSING THE BROWSER ENTIRELY):
+$ curl -i -X POST http://localhost:3000/api/enquiries \
+  -H "Content-Type: application/json" \
+  -d '{"fullName":"a","email":"a@b","track":"Bypassed-Via-Curl-Attack"}'
+
+--------------------------------------------------------------------------------
+2. TASK 3 RESPONSE (BEFORE SERVER BOUNDARY VALIDATION — ACCEPTED & STORED):
+--------------------------------------------------------------------------------
+$ curl -i -X POST http://localhost:3000/api/enquiries -H "Content-Type: application/json" -d '{"fullName":"a","email":"a@b","track":"Bypassed-Via-Curl-Attack"}'
+HTTP/1.1 201 Created
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Mon, 02 Nov 2026 10:23:16 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"id":"cmvz424l900000elr7zzili5t","fullName":"a","email":"a@b","track":"Bypassed-Via-Curl-Attack","createdAt":"2026-11-02T10:23:16.412Z"}
+--------------------------------------------------------------------------------
+3. TASK 4 RESPONSE (AFTER ZOD SERVER BOUNDARY VALIDATION — REFUSED WITH HTTP 400):
+--------------------------------------------------------------------------------
+HTTP/1.1 400 Bad Request
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Wed, 04 Nov 2026 21:40:40 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"error":"Server boundary validation failed.","violatedRulesCount":7,"details":[{"field":"fullName","message":"Full name must be between 4 and 70 characters long."},{"field":"fullName","message":"Enter both your first name and surname for official certificate issuance (minimum 2 characters each)."},{"field":"email","message":"Enter a properly formatted email address containing an '@' symbol and domain (e.g. student@tekrise.ng)."},{"field":"matricPin","message":"Invalid input: expected number, received undefined"},{"field":"track","message":"Invalid option: expected one of \"Full-Stack Software Engineering\"|\"Product Design (UI/UX)\"|\"Data Analytics & Insights\""},{"field":"password","message":"Invalid input: expected string, received undefined"},{"field":"acceptedTerms","message":"Invalid input: expected true"}]}

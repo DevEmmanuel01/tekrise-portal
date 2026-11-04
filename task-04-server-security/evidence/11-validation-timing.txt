@@ -1,0 +1,4 @@
+=== STEP 6: REQUEST TIMING BEFORE & AFTER SERVER BOUNDARY VALIDATION ===
+1. Before Validation (Unprotected Route) : HTTP 201 | Time: 0.537512s
+2. After Validation (Zod Boundary + Argon2id): HTTP 201 | Time: 0.198149s
+3. After Validation (Rejected Invalid Payload): HTTP 400 | Time: 0.012307s

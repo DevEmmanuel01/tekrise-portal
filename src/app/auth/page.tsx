@@ -138,16 +138,53 @@ function AuthPortalContent() {
         e.preventDefault();
         setLoginSubmitAttempted(true);
         setDisabledClickNotice(null);
+        setSubmittedMessage(null);
 
-        if (mode === "login" || mode === "reset") {
-            if (emailError || (mode === "login" && passwordError)) {
-                return;
+        if (mode === "login") {
+            if (emailError || passwordError) return;
+            setIsSubmitting(true);
+            try {
+                const res = await fetch("/api/auth/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, password }),
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    setSubmittedMessage(
+                        `Signed in as ${data.student.fullName} (${data.student.email}) — Matric PIN #${data.student.matricPin} verified!`
+                    );
+                } else {
+                    setDisabledClickNotice(data.error || "Sign in failed.");
+                }
+            } catch {
+                setDisabledClickNotice("Network error during login.");
+            } finally {
+                setIsSubmitting(false);
             }
-            setSubmittedMessage(
-                mode === "login"
-                    ? `Login format verified for ${cleanEmail.toLowerCase()}. Ready for server session handoff.`
-                    : `If an active student record matches ${cleanEmail.toLowerCase()}, a recovery code has been queued.`
-            );
+            return;
+        }
+
+        if (mode === "reset") {
+            if (emailError) return;
+            setIsSubmitting(true);
+            try {
+                const res = await fetch("/api/auth/reset", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email }),
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    setSubmittedMessage(data.message);
+                } else {
+                    setDisabledClickNotice(data.error || "Reset failed.");
+                }
+            } catch {
+                setDisabledClickNotice("Network error during reset.");
+            } finally {
+                setIsSubmitting(false);
+            }
             return;
         }
 
@@ -162,16 +199,18 @@ function AuthPortalContent() {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    fullName: cleanName,
-                    email: cleanEmail.toLowerCase(),
+                    fullName,
+                    email,
                     track,
                     matricPin: numericMatricPin,
+                    password,
+                    acceptedTerms,
                 }),
             });
             const data = await res.json();
             if (res.ok) {
                 setSubmittedMessage(
-                    `Student account registered! Reference ID: #${data.id} (Matric PIN #${numericMatricPin} verified).`
+                    `Student account registered! Stored Email: ${data.email} (Ref #${data.id}, Matric PIN #${data.matricPin}).`
                 );
             } else {
                 setDisabledClickNotice(data.error || "Submission failed.");
