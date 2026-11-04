@@ -1,0 +1,106 @@
+================================================================================
+TASK 4 STEP 8: TRIGGERING & DEFEATING IP-BASED RATE LIMITING
+Target Endpoint: POST http://localhost:3000/api/auth/login (Limit: 5 req / 10 min)
+================================================================================
+
+PART A: SENDING 6 REQUESTS FROM A SINGLE IP (41.203.72.10) -> BLOCKED ON ATTEMPT 6
+--------------------------------------------------------------------------------
+--- Attempt #1 from fixed IP 41.203.72.10 ---
+HTTP/1.1 401 Unauthorized
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Wed, 04 Nov 2026 22:35:28 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"error":"Incorrect email or password."}
+--- Attempt #2 from fixed IP 41.203.72.10 ---
+HTTP/1.1 401 Unauthorized
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Wed, 04 Nov 2026 22:35:28 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"error":"Incorrect email or password."}
+--- Attempt #3 from fixed IP 41.203.72.10 ---
+HTTP/1.1 401 Unauthorized
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Wed, 04 Nov 2026 22:35:28 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"error":"Incorrect email or password."}
+--- Attempt #4 from fixed IP 41.203.72.10 ---
+HTTP/1.1 401 Unauthorized
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Wed, 04 Nov 2026 22:35:28 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"error":"Incorrect email or password."}
+--- Attempt #5 from fixed IP 41.203.72.10 ---
+HTTP/1.1 401 Unauthorized
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Wed, 04 Nov 2026 22:35:29 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"error":"Incorrect email or password."}
+--- Attempt #6 from fixed IP 41.203.72.10 ---
+HTTP/1.1 429 Too Many Requests
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+retry-after: 600
+x-ratelimit-limit: 5
+x-ratelimit-remaining: 0
+Date: Wed, 04 Nov 2026 22:35:29 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"error":"Rate limit exceeded: Too many login attempts from 41.203.72.10. Account login temporarily locked for 600 seconds.","retryAfterSeconds":600}
+
+PART B: DEFEATING OUR OWN RATE LIMIT BY ROTATING SOURCE IP ON EVERY REQUEST
+(Simulating a residential proxy pool / botnet rotating X-Forwarded-For across 8 guesses)
+--------------------------------------------------------------------------------
+--- Bypass Attempt #1 using Rotated IP 197.210.70.101 ---
+HTTP/1.1 401 Unauthorized
+{"error":"Incorrect email or password."}
+
+--- Bypass Attempt #2 using Rotated IP 197.210.70.102 ---
+HTTP/1.1 401 Unauthorized
+{"error":"Incorrect email or password."}
+
+--- Bypass Attempt #3 using Rotated IP 197.210.70.103 ---
+HTTP/1.1 401 Unauthorized
+{"error":"Incorrect email or password."}
+
+--- Bypass Attempt #4 using Rotated IP 197.210.70.104 ---
+HTTP/1.1 401 Unauthorized
+{"error":"Incorrect email or password."}
+
+--- Bypass Attempt #5 using Rotated IP 197.210.70.105 ---
+HTTP/1.1 401 Unauthorized
+{"error":"Incorrect email or password."}
+
+--- Bypass Attempt #6 using Rotated IP 197.210.70.106 ---
+HTTP/1.1 401 Unauthorized
+{"error":"Incorrect email or password."}
+
+--- Bypass Attempt #7 using Rotated IP 197.210.70.107 ---
+HTTP/1.1 401 Unauthorized
+{"error":"Incorrect email or password."}
+
+--- Bypass Attempt #8 using Rotated IP 197.210.70.108 ---
+HTTP/1.1 401 Unauthorized
+{"error":"Incorrect email or password."}
+
