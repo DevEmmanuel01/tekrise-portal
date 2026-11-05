@@ -4,7 +4,7 @@ import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 
-type AuthMode = "signup" | "login" | "reset";
+type AuthMode = "signup" | "login" | "reset" | "verify";
 
 function AuthPortalContent() {
     const searchParams = useSearchParams();
@@ -40,6 +40,7 @@ function AuthPortalContent() {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [verificationCode, setVerificationCode] = useState("");
 
     // Interaction & touch states (for Step 3 Category 1: Empty field on blur)
     const [touched, setTouched] = useState<Record<string, boolean>>({});
@@ -117,8 +118,9 @@ function AuthPortalContent() {
     const isLoginValid = cleanEmail.length > 0 && password.length > 0;
     const isResetValid = cleanEmail.length > 0;
 
-    const isCurrentFormValid =
-        mode === "signup" ? isSignupValid : mode === "login" ? isLoginValid : isResetValid;
+    const isVerifyValid = !emailError && verificationCode.trim().length === 6;
+  const isCurrentFormValid =
+    mode === "signup" ? isSignupValid : mode === "login" ? isLoginValid : mode === "verify" ? isVerifyValid : isResetValid;
 
     const handleDisabledAreaClick = () => {
         if (mode === "signup" && !isSignupValid) {
@@ -165,7 +167,29 @@ function AuthPortalContent() {
             return;
         }
 
-        if (mode === "reset") {
+        if (mode === "verify") {
+      setIsSubmitting(true);
+      try {
+        const res = await fetch("/api/auth/verify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, code: verificationCode }),
+        });
+        const data = await res.json();
+        if (res.ok) {
+          setSubmittedMessage(data.message);
+        } else {
+          setDisabledClickNotice(data.error || "Verification failed.");
+        }
+      } catch {
+        setDisabledClickNotice("Network error during verification.");
+      } finally {
+        setIsSubmitting(false);
+      }
+      return;
+    }
+
+    if (mode === "reset") {
             if (emailError) return;
             setIsSubmitting(true);
             try {
@@ -210,7 +234,7 @@ function AuthPortalContent() {
             const data = await res.json();
             if (res.ok) {
                 setSubmittedMessage(
-                    `Student account registered! Stored Email: ${data.email} (Ref #${data.id}, Matric PIN #${data.matricPin}).`
+                    `Student account registered! Stored Email: ${data.email} (Ref #${data.id}, Matric PIN #${data.matricPin}). 6-Digit Verification OTP sent: ${data.demoVerificationCode}`
                 );
             } else {
                 setDisabledClickNotice(data.error || "Submission failed.");
@@ -307,6 +331,14 @@ function AuthPortalContent() {
                         >
                             3. Reset Access
                         </button>
+            <button
+              type="button"
+              onClick={() => switchMode("verify")}
+              aria-pressed={mode === "verify"}
+              className={`mode-tab-btn type-label-md ${mode === "verify" ? "active" : ""}`}
+            >
+              4. Verify Email OTP
+            </button>
                     </nav>
 
                     {/* Notice: Non-functional decorative logo inside form card intentionally omitted (Step 2) */}
@@ -315,6 +347,7 @@ function AuthPortalContent() {
                             {mode === "signup" && "Cohort 04 Student Portal Registration"}
                             {mode === "login" && "Returning Student Portal Sign-In"}
                             {mode === "reset" && "Recover Student Portal Access"}
+              {mode === "verify" && "Verify Your Student Email (6-Digit OTP)"}
                         </h1>
                         <p className="enquiry-description type-body-sm">
                             {mode === "signup" &&
@@ -517,7 +550,27 @@ function AuthPortalContent() {
                         )}
 
                         {/* FIELD 5: PASSWORD (Signup & Login — Step 7) */}
-                        {mode !== "reset" && (
+                        {mode === "verify" && (
+              <div className="form-field-group">
+                <label htmlFor="verificationCode" className="type-label-md">
+                  6-Digit Email Verification Code <span aria-hidden="true">*</span>
+                </label>
+                <input
+                  id="verificationCode"
+                  name="verificationCode"
+                  type="text"
+                  inputMode="numeric"
+                  required
+                  maxLength={6}
+                  value={verificationCode}
+                  onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, ""))}
+                  placeholder="Enter 6-digit code from email (e.g. 849204)"
+                  className="form-input type-body-md"
+                />
+              </div>
+            )}
+
+            {mode !== "reset" && mode !== "verify" && (
                             <div className="form-group">
                                 <label htmlFor="password" className="form-label type-label-md">
                                     Portal Password <span aria-hidden="true">*</span>
@@ -678,6 +731,7 @@ function AuthPortalContent() {
                                         (isSubmitting ? "Registering Student..." : "Complete Cohort 04 Registration")}
                                     {mode === "login" && "Sign In to Student Portal"}
                                     {mode === "reset" && "Send Recovery Code"}
+                  {mode === "verify" && "Verify 6-Digit Code"}
                                 </button>
                                 {!isCurrentFormValid && mode === "signup" && (
                                     <span

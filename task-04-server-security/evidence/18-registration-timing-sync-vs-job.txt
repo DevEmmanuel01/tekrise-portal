@@ -1,0 +1,17 @@
+=== TASK 4 STEP 10: SYNCHRONOUS SMTP vs. BACKGROUND JOB REGISTRATION TIMING ===
+Timestamp: 2026-11-04T23:48:34.336Z
+
+1. SYNCHRONOUS EMAIL DISPATCH (POST /api/enquiries?dispatch=sync)
+   - Behaviour         : HTTP handler blocks waiting for SMTP network dispatch to finish before returning 201
+   - HTTP Status       : 201
+   - Total Client Time : 2368 ms (Server internal: 1703 ms)
+   - Student Created   : kemi.sync.34226@tekrise.ng (OTP: 985622)
+
+2. ASYNCHRONOUS BACKGROUND JOB DISPATCH (POST /api/enquiries?dispatch=async-job)
+   - Behaviour         : HTTP handler writes VerificationCode row and enqueues background job via setImmediate(), returning 201 immediately
+   - HTTP Status       : 201
+   - Total Client Time : 532 ms (Server internal: 518 ms)
+   - Student Created   : tunde.job.34227@tekrise.ng (OTP: 300280)
+
+3. MEASURED LATENCY REDUCTION:
+   - Time Saved on HTTP Response : 1836 ms faster (77.5% reduction in blocking time)

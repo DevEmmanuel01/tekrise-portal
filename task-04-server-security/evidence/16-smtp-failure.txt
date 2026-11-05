@@ -1,0 +1,28 @@
+=== TASK 4 STEP 10: SMTP AUTHENTICATION FAILURE WITH ORDINARY PASSWORD ===
+Timestamp : 2026-11-04T23:48:27.005Z
+SMTP Host : smtp.gmail.com:587 (STARTTLS)
+Auth User : admissions.tekrise.ibadan@gmail.com
+Auth Type : Standard Account Login Password (NOT an App Password)
+
+--- CAPTURED SMTP ERROR RESPONSE ---
+Error Code    : EAUTH
+Response Code : 535
+SMTP Response : 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials a640c23a62f3a-c4d0e424fa2sm120901266b.30 - gsmtp
+
+Full Stack / Diagnostic:
+Error: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials a640c23a62f3a-c4d0e424fa2sm120901266b.30 - gsmtp
+    at SMTPConnection._formatError (/Users/gbolahanadekola/tekrise-portal/node_modules/nodemailer/dist/cjs/smtp-connection/index.js:961:19)
+    at SMTPConnection._actionAUTHComplete (/Users/gbolahanadekola/tekrise-portal/node_modules/nodemailer/dist/cjs/smtp-connection/index.js:1799:34)
+    at SMTPConnection.<anonymous> (/Users/gbolahanadekola/tekrise-portal/node_modules/nodemailer/dist/cjs/smtp-connection/index.js:649:26)
+    at SMTPConnection._processResponse (/Users/gbolahanadekola/tekrise-portal/node_modules/nodemailer/dist/cjs/smtp-connection/index.js:1186:20)
+    at SMTPConnection._onData (/Users/gbolahanadekola/tekrise-portal/node_modules/nodemailer/dist/cjs/smtp-connection/index.js:906:14)
+    at SMTPConnection._onSocketData (/Users/gbolahanadekola/tekrise-portal/node_modules/nodemailer/dist/cjs/smtp-connection/index.js:217:44)
+    at TLSSocket.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+
+Why It Failed:
+Modern mail providers (Google Workspace / Gmail / Microsoft 365) block standard user login passwords on raw SMTP submission ports (587/465) because plain credentials bypass interactive 2FA/MFA challenges and cannot be scoped or revoked independently of the master account.

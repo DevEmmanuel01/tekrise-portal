@@ -4,9 +4,18 @@ import { RegistrationBoundarySchema } from "@/lib/server-schemas";
 import { hashPassword } from "@/lib/hash";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { checkPasswordBreached } from "@/lib/breach-check";
+import {
+  generateVerificationCode,
+  VERIFICATION_EXPIRY_MS,
+  dispatchVerificationEmail,
+} from "@/lib/verification";
 
 export async function POST(request: Request) {
+  const requestStart = performance.now();
   try {
+    const url = new URL(request.url);
+    const dispatchMode = url.searchParams.get("dispatch") || "async-job";
+
     // STEP 8: Endpoint Rate Limiting (5 registration attempts per 10 minutes per IP)
     const rateLimit = checkRateLimit(request, "register", 5, 10 * 60 * 1000);
     if (!rateLimit.allowed) {
@@ -86,6 +95,10 @@ export async function POST(request: Request) {
     // STEP 4: Adaptive Argon2id Password Hashing
     const passwordHash = await hashPassword(password);
 
+    // STEP 10: Create Student + Cryptographic 6-Digit VerificationCode (8-min expiry)
+    const code = generateVerificationCode();
+    const expiresAt = new Date(Date.now() + VERIFICATION_EXPIRY_MS);
+
     const student = await prisma.student.create({
       data: {
         fullName,
@@ -94,8 +107,40 @@ export async function POST(request: Request) {
         passwordHash,
         track,
         campusCohortBatch: "IBADAN-RING-ROAD-C04",
+        isVerified: false,
+        verificationCodes: {
+          create: {
+            code,
+            expiresAt,
+          },
+        },
       },
     });
+
+    // Compare Synchronous Blocking SMTP vs. Non-Blocking Background Job Dispatch
+    if (dispatchMode === "sync") {
+      await dispatchVerificationEmail({
+        fullName,
+        email,
+        code,
+        track,
+        matricPin,
+      });
+    } else {
+      setImmediate(() => {
+        dispatchVerificationEmail({
+          fullName,
+          email,
+          code,
+          track,
+          matricPin,
+        }).catch((err) =>
+          console.error("Background email worker error:", err)
+        );
+      });
+    }
+
+    const totalResponseMs = Math.round(performance.now() - requestStart);
 
     return NextResponse.json(
       {
@@ -104,6 +149,11 @@ export async function POST(request: Request) {
         email: student.email,
         matricPin: student.matricPin,
         track: student.track,
+        isVerified: student.isVerified,
+        verificationDispatchMode: dispatchMode,
+        verificationExpiresAt: expiresAt.toISOString(),
+        demoVerificationCode: code,
+        responseTimeMs: totalResponseMs,
         createdAt: student.createdAt,
       },
       { status: 201 }
