@@ -7,7 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Preserved from Task 2/3 for backward compatibility
 model StudentEnquiry {
   id        String   @id @default(cuid())
   fullName  String
@@ -16,7 +15,6 @@ model StudentEnquiry {
   createdAt DateTime @default(now())
 }
 
-// 1. People who use the system (Tekrise Academy Students)
 model Student {
   id                  String                  @id @default(cuid())
   fullName            String
@@ -25,7 +23,7 @@ model Student {
   passwordHash        String
   track               String
   role                String                  @default("STUDENT")
-  campusCohortBatch   String
+  campusCohortBatch   String                  @default("IBADAN-RING-ROAD-C04")
   bursaryAuditNote    String?
   isVerified          Boolean                 @default(false)
   acceptedTermsAt     DateTime                @default(now())
@@ -40,7 +38,6 @@ model Student {
   @@index([track])
 }
 
-// 2. Their sessions (Server-side session store)
 model Session {
   id         String   @id @default(cuid())
   studentId  String
@@ -56,14 +53,13 @@ model Session {
   @@index([expiresAt])
 }
 
-// 3A. Money table (Confirmed tuition installment payments in Kobo)
 model TuitionPayment {
   id                String   @id @default(cuid())
   studentId         String
-  studentEmail      String   // Duplicated deliberately for immutable tax/audit ledger even if Student email changes
+  studentEmail      String
   cohortCode        String   @default("COHORT-04")
-  amountKobo        Int      // Stored in Kobo (e.g. 15000000 = ₦150,000.00) to avoid floating-point rounding errors
-  installmentPhase  String   // "FIRST_60_PERCENT" or "SECOND_40_PERCENT"
+  amountKobo        Int
+  installmentPhase  String
   paystackReference String   @unique
   paidAt            DateTime @default(now())
 
@@ -73,15 +69,14 @@ model TuitionPayment {
   @@index([paidAt])
 }
 
-// 3B. Money-attempts table (Every initiated, failed, abandoned, or network-dropped payment attempt)
 model TuitionPaymentAttempt {
   id                String   @id @default(cuid())
   studentId         String
-  studentEmail      String   // Duplicated deliberately as point-in-time snapshot of payer email
+  studentEmail      String
   amountKobo        Int
   providerReference String   @unique
-  channel           String   @default("BANK_TRANSFER") // "USSD", "CARD", "BANK_TRANSFER"
-  status            String   // "INITIATED", "FAILED", "ABANDONED", "NETWORK_DROP", "SUCCEEDED"
+  channel           String   @default("BANK_TRANSFER")
+  status            String
   failureReason     String?
   ipAddress         String?
   attemptedAt       DateTime @default(now())
@@ -92,7 +87,6 @@ model TuitionPaymentAttempt {
   @@index([status])
 }
 
-// 4. Chunks for the Tekrise Academy Syllabus & Policy RAG retrieval system
 model SyllabusChunk {
   id            String   @id @default(cuid())
   track         String
@@ -100,14 +94,13 @@ model SyllabusChunk {
   chunkIndex    Int
   content       String
   tokenCount    Int
-  embeddingJson String?  // Serialized vector embedding for cohort Q&A retrieval
+  embeddingJson String?
   updatedAt     DateTime @updatedAt
 
   @@unique([documentTitle, chunkIndex])
   @@index([track])
 }
 
-// 5. Email Verification Codes (6-digit cryptographic OTPs)
 model VerificationCode {
   id        String    @id @default(cuid())
   studentId String
