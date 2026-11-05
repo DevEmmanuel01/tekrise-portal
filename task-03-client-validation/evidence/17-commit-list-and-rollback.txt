@@ -1,0 +1,21 @@
+=== 1. COMMIT LIST BEFORE ROLLBACK ===
+8768152 chore(task-03): experimental loosened validation tweak (regretted change)
+b6b7f5d docs(task-03): capture browser form attacks and direct curl endpoint bypass
+4d6a271 feat(task-03): capture hidden vs disabled button states and document password rules
+2fd1ae2 fix(task-03): keep aria-disabled submit button in tab order and add VoiceOver accessibility audit, also i added the two optional screenreader results to see
+59c9b5b feat(task-03): replace number input with numeric text input and remove PIN shape leak
+ada50a4 feat(task-03): implement four-category client validation rules and trade-off analysis
+
+=== 2. ROLLBACK DETAILS ===
+Regretted Commit ID Reverted: 8768152
+Target Clean State Commit ID: b6b7f5d
+Command Run: git revert --no-edit 8768152
+
+=== 3. COMMIT LIST AFTER ROLLBACK ===
+ae23b1d Revert "chore(task-03): experimental loosened validation tweak (regretted change)"
+8768152 chore(task-03): experimental loosened validation tweak (regretted change)
+b6b7f5d docs(task-03): capture browser form attacks and direct curl endpoint bypass
+4d6a271 feat(task-03): capture hidden vs disabled button states and document password rules
+2fd1ae2 fix(task-03): keep aria-disabled submit button in tab order and add VoiceOver accessibility audit, also i added the two optional screenreader results to see
+59c9b5b feat(task-03): replace number input with numeric text input and remove PIN shape leak
+ada50a4 feat(task-03): implement four-category client validation rules and trade-off analysis
