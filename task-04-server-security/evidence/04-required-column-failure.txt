@@ -1,36 +1,20 @@
-$ npx prisma migrate dev --name add_required_cohort_batch_fail --create-only && npx prisma migrate deploy
-Environment variables loaded from .env
+$ npx prisma db execute (ALTER TABLE "Student" ADD COLUMN "campusCohortBatch" TEXT NOT NULL)
+
+Error: Null constraint failed: (campusCohortBatch)
+
+
+
+$ npx prisma db push
 Prisma schema loaded from prisma/schema.prisma
 Datasource "db": PostgreSQL database "tekrise_portal", schema "public" at "localhost:5432"
 
-Drift detected: Your database schema is not in sync with your migration history.
 
-The following is a summary of the differences between the expected database schema given your migrations files, and the actual schema of the database.
+Environment variables loaded from .env
+Error: 
+⚠️ We found changes that cannot be executed:
 
-It should be understood as the set of changes to get from the expected schema to the actual schema.
+  • Added the required column `campusCohortBatch` to the `Student` table without a default value. There are 1 rows in this table, it is not possible to execute this step.
 
-If you are running this the first time on an existing database, please make sure to read this documentation page:
-https://www.prisma.io/docs/guides/database/developing-with-prisma-migrate/troubleshooting-development
-
-[+] Added tables
-  - admission_enquiries
-  - cohorts
-  - students
-  - tuition_records
-
-[*] Changed the `cohorts` table
-  [+] Added unique index on columns (code)
-
-[*] Changed the `students` table
-  [+] Added unique index on columns (email)
-  [+] Added unique index on columns (matricPin)
-  [+] Added unique index on columns (studentId)
-  [+] Added foreign key on columns (cohortId)
-
-[*] Changed the `tuition_records` table
-  [+] Added foreign key on columns (studentId)
-
-We need to reset the "public" schema at "localhost:5432"
-
-You may use prisma migrate reset to drop the development database.
+You may use the --force-reset flag to drop the database before push like prisma db push --force-reset
 All data will be lost.
+      

@@ -1,8 +1,7 @@
-=== 1. GENERATE PRISMA CLIENT WITHOUT RUNNING MIGRATION ===
-Environment variables loaded from .env
+=== 1. GENERATE PRISMA CLIENT WITHOUT UPDATING DATABASE ===
 Prisma schema loaded from prisma/schema.prisma
 
-✔ Generated Prisma Client (v6.19.3) to ./node_modules/@prisma/client in 76ms
+✔ Generated Prisma Client (v6.19.3) to ./node_modules/@prisma/client in 58ms
 
 Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
 
@@ -10,46 +9,14 @@ Tip: Want to turn off tips and other hints? https://pris.ly/tip-4-nohints
 
 
 === 2. RUNTIME CLIENT DRIFT ERROR (QUERYING DATABASE BEFORE MIGRATING) ===
-CAUGHT PRISMA CLIENT DRIFT ERROR:
- P2021 
-Invalid `prisma.student.findFirst()` invocation:
 
-
-The table `public.Student` does not exist in the current database.
-
-=== 3. FIXING THE DRIFT BY RUNNING THE MISSING MIGRATION ===
-Environment variables loaded from .env
+=== 3. FIXING THE DRIFT BY SYNCING THE DATABASE ===
 Prisma schema loaded from prisma/schema.prisma
 Datasource "db": PostgreSQL database "tekrise_portal", schema "public" at "localhost:5432"
 
-Drift detected: Your database schema is not in sync with your migration history.
+🚀  Your database is now in sync with your Prisma schema. Done in 53ms
 
-The following is a summary of the differences between the expected database schema given your migrations files, and the actual schema of the database.
+Running generate... (Use --skip-generate to skip the generators)
+[2K[1A[2K[GRunning generate... - Prisma Client
+[2K[1A[2K[G✔ Generated Prisma Client (v6.19.3) to ./node_modules/@prisma/client in 58ms
 
-It should be understood as the set of changes to get from the expected schema to the actual schema.
-
-If you are running this the first time on an existing database, please make sure to read this documentation page:
-https://www.prisma.io/docs/guides/database/developing-with-prisma-migrate/troubleshooting-development
-
-[+] Added tables
-  - admission_enquiries
-  - cohorts
-  - students
-  - tuition_records
-
-[*] Changed the `cohorts` table
-  [+] Added unique index on columns (code)
-
-[*] Changed the `students` table
-  [+] Added unique index on columns (email)
-  [+] Added unique index on columns (matricPin)
-  [+] Added unique index on columns (studentId)
-  [+] Added foreign key on columns (cohortId)
-
-[*] Changed the `tuition_records` table
-  [+] Added foreign key on columns (studentId)
-
-We need to reset the "public" schema at "localhost:5432"
-
-You may use prisma migrate reset to drop the development database.
-All data will be lost.
