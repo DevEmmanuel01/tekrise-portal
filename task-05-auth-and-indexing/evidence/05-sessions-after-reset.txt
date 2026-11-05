@@ -1,0 +1,21 @@
+=== TASK 5 STEP 3 (AFTER RESET): ATOMIC SESSION INVALIDATION PROOF ===
+Timestamp : 2026-11-05T22:45:07.282Z
+Student   : Oluwaseun Adeleke (adeleke.o@tekrise.ng) | ID: cmw2m77ku0000sbdib4qf9bqp
+
+1. PASSWORD RESET CONFIRMATION RESPONSE (POST /api/auth/reset/confirm):
+   -> HTTP Status : 200 OK
+   -> Response    : {
+  "message": "Password reset successful. All existing active sessions across all devices have been invalidated.",
+  "studentEmail": "adeleke.o@tekrise.ng",
+  "invalidatedSessionsCount": 2,
+  "resetCompletedAt": "2026-11-05T22:45:07.259Z"
+}
+
+2. ACTIVE SESSIONS REMAINING IN public."Session" AFTER PASSWORD RESET:
+   -> Active Sessions Count: 0
+   -> Rows in DB           : []
+
+3. REPLAYING PRIOR DEVICE 1 SESSION COOKIE AFTER PASSWORD RESET:
+   $ curl -i http://localhost:3000/api/student/receipts -H "Cookie: tekrise_session=46bbff956488e03b42e6acda2e7e92373600d292c7a8a1167b3af6ea6a6d3c2a"
+   -> HTTP Status : 401 Unauthorized
+   -> Response    : {"error":"401 Unauthorized: Valid tekrise_session cookie required to access student tuition receipts."}

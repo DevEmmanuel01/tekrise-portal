@@ -2,11 +2,18 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { LoginBoundarySchema } from "@/lib/server-schemas";
 import { verifyPassword } from "@/lib/hash";
-import { checkRateLimit } from "@/lib/rate-limit";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
+import {
+    createServerSession,
+    buildSessionCookieHeader,
+} from "@/lib/session";
+
+// Precomputed Argon2id dummy hash to prevent timing-oracle user enumeration when email is not found
+const DUMMY_ARGON2ID_HASH =
+    "$argon2id$v=19$m=65536,t=3,p=1$IN0WSXt/RPWleiVaA27gOQ$eFXxorChkl2iisZu3wnzdulcKarZRqHrBYcHwHHT8Ik";
 
 export async function POST(request: Request) {
     try {
-        // STEP 8: Login Rate Limiting (5 attempts per 10 minutes per IP)
         const rateLimit = checkRateLimit(request, "login", 5, 10 * 60 * 1000);
         if (!rateLimit.allowed) {
             return NextResponse.json(
@@ -48,6 +55,8 @@ export async function POST(request: Request) {
         });
 
         if (!student) {
+            // Constant-time mitigation: still execute Argon2id verify against dummy hash
+            await verifyPassword(DUMMY_ARGON2ID_HASH, password);
             return NextResponse.json(
                 { error: "Incorrect email or password." },
                 { status: 401 }
@@ -62,19 +71,39 @@ export async function POST(request: Request) {
             );
         }
 
-        return NextResponse.json(
+        // TASK 5 STEP 1: Create stateful server session in PostgreSQL and issue HttpOnly cookie
+        const clientIp = getClientIp(request);
+        const userAgent = request.headers.get("user-agent") || "Unknown-Client";
+
+        const sessionData = await createServerSession({
+            studentId: student.id,
+            ipAddress: clientIp,
+            userAgent,
+        });
+
+        const response = NextResponse.json(
             {
-                message: "Authentication successful.",
+                message: "Authentication successful. Server session established.",
+                sessionId: sessionData.sessionId,
+                sessionExpiresAt: sessionData.expiresAt.toISOString(),
                 student: {
                     id: student.id,
                     fullName: student.fullName,
                     email: student.email,
                     matricPin: student.matricPin,
                     track: student.track,
+                    role: student.role,
                 },
             },
             { status: 200 }
         );
+
+        response.headers.set(
+            "Set-Cookie",
+            buildSessionCookieHeader(sessionData.rawToken)
+        );
+
+        return response;
     } catch (error) {
         console.error("Login error:", error);
         return NextResponse.json(

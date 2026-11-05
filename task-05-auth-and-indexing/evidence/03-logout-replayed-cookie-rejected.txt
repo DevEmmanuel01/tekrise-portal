@@ -1,0 +1,25 @@
+=== TASK 5 STEP 2: SERVER-SIDE LOGOUT & REPLAYED SESSION COOKIE REJECTION ===
+Timestamp: 2026-11-05T22:45:05.442Z
+
+1. LOGIN & CAPTURED SESSION COOKIE:
+   - Account           : adeleke.o@tekrise.ng
+   - Captured Cookie   : tekrise_session=867208307ad86ecca94c74953a9b16158b55c79f461dc8263f5ecad08b4137a4
+   - DB Session ID     : cmw44vnnl000asbbybwxcsi7a
+
+2. REQUEST TO PROTECTED ROUTE BEFORE LOGOUT (GET /api/student/receipts):
+   $ curl -i http://localhost:3000/api/student/receipts -H "Cookie: tekrise_session=867208307ad86ecca94c74953a9b16158b55c79f461dc8263f5ecad08b4137a4"
+   -> HTTP Status      : 200 OK
+   -> Response Body    : {"studentId":"cmw2m77ku0000sbdib4qf9bqp","email":"adeleke.o@tekrise.ng","matricPin":48291,"tuitionPayments":[]}
+
+3. EXECUTING LOGOUT (POST /api/auth/logout):
+   $ curl -i -X POST http://localhost:3000/api/auth/logout -H "Cookie: tekrise_session=867208307ad86ecca94c74953a9b16158b55c79f461dc8263f5ecad08b4137a4"
+   -> HTTP Status      : 200 OK
+   -> Set-Cookie Clear : tekrise_session=; HttpOnly; Path=/; SameSite=Lax; Max-Age=0
+   -> Response Body    : {"message":"Logged out. Server-side session destroyed and browser cookie cleared."}
+
+4. REPLAYING THE CAPTURED COOKIE AFTER LOGOUT (ATTACK SIMULATION):
+   $ curl -i http://localhost:3000/api/student/receipts -H "Cookie: tekrise_session=867208307ad86ecca94c74953a9b16158b55c79f461dc8263f5ecad08b4137a4"
+   -> HTTP Status      : 401 Unauthorized
+   -> Response Body    : {"error":"401 Unauthorized: Valid tekrise_session cookie required to access student tuition receipts."}
+
+Conclusion: Because POST /api/auth/logout deleted the Session row in PostgreSQL (rather than merely clearing the browser cookie), replaying the captured token from terminal/curl is immediately rejected with HTTP 401.

@@ -1,0 +1,12 @@
+=== TASK 5 STEP 4A: UNAUTHENTICATED REQUESTS REJECTED WITH HTTP 401 ===
+Timestamp: 2026-11-05T22:45:07.465Z
+
+1. REQUEST WITH NO SESSION COOKIE (GET /api/student/receipts):
+   $ curl -i http://localhost:3000/api/student/receipts
+   -> HTTP Status : 401 Unauthorized
+   -> Response    : {"error":"401 Unauthorized: Valid tekrise_session cookie required to access student tuition receipts."}
+
+2. REQUEST WITH FORGED / TAMPERED SESSION COOKIE (GET /api/admin/cohort-audit):
+   $ curl -i http://localhost:3000/api/admin/cohort-audit -H "Cookie: tekrise_session=forged_invalid_token_999999999"
+   -> HTTP Status : 401 Unauthorized
+   -> Response    : {"error":"401 Unauthorized: You must be signed in to access the Ibadan Bursary Cohort Audit endpoint."}

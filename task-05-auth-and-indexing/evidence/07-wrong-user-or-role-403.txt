@@ -1,0 +1,23 @@
+=== TASK 5 STEP 4B: AUTHORISATION VIOLATIONS REJECTED WITH HTTP 403 FORBIDDEN ===
+Timestamp: 2026-11-05T22:45:07.645Z
+Authenticated Caller: Oluwaseun Adeleke (adeleke.o@tekrise.ng) | ID: cmw2m77ku0000sbdib4qf9bqp | Role: STUDENT
+
+1. HORIZONTAL PRIVILEGE ESCALATION / IDOR ATTEMPT (OWNERSHIP CHECK):
+   Caller (adeleke.o@tekrise.ng) attempts to read tuition receipts belonging to funmilayo.bakare@tekrise.ng (ID: cmw2mstgo0000sbbyfgauq4fv):
+   $ curl -i "http://localhost:3000/api/student/receipts?studentId=cmw2mstgo0000sbbyfgauq4fv" -H "Cookie: tekrise_session=9fa771ada2325535051e8658662ad30f4a763ca2fff7e9fbdb7ddd87313508c2"
+   -> HTTP Status : 403 Forbidden
+   -> Response    : {
+  "error": "403 Forbidden (IDOR Blocked): Authenticated student adeleke.o@tekrise.ng (cmw2m77ku0000sbdib4qf9bqp) is not authorised to access tuition records belonging to studentId cmw2mstgo0000sbbyfgauq4fv.",
+  "authenticatedStudentId": "cmw2m77ku0000sbdib4qf9bqp",
+  "requestedResourceOwnerId": "cmw2mstgo0000sbbyfgauq4fv"
+}
+
+2. VERTICAL PRIVILEGE ESCALATION ATTEMPT (ROLE CHECK):
+   Caller with role "STUDENT" attempts to access Bursary Registrar Admin endpoint (/api/admin/cohort-audit):
+   $ curl -i http://localhost:3000/api/admin/cohort-audit -H "Cookie: tekrise_session=9fa771ada2325535051e8658662ad30f4a763ca2fff7e9fbdb7ddd87313508c2"
+   -> HTTP Status : 403 Forbidden
+   -> Response    : {
+  "error": "403 Forbidden (Insufficient Role): Account adeleke.o@tekrise.ng holds role \"STUDENT\", but \"REGISTRAR_ADMIN\" privilege is required to access /api/admin/cohort-audit.",
+  "currentRole": "STUDENT",
+  "requiredRole": "REGISTRAR_ADMIN"
+}

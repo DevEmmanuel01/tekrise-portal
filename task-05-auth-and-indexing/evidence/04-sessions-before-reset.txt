@@ -1,0 +1,25 @@
+=== TASK 5 STEP 3 (BEFORE RESET): ACTIVE SESSIONS IN POSTGRESQL ===
+Timestamp : 2026-11-05T22:45:05.757Z
+Student   : Oluwaseun Adeleke (adeleke.o@tekrise.ng) | ID: cmw2m77ku0000sbdib4qf9bqp
+Active Sessions Count in public."Session": 2
+
+[
+  {
+    "id": "cmw44vo4d000csbbyyrbse9lw",
+    "studentId": "cmw2m77ku0000sbdib4qf9bqp",
+    "tokenHash": "15293949a27612a46c4f062a32295b42a66969c76ccd19e8a857b11edb428e8d",
+    "ipAddress": "10.20.2.1",
+    "userAgent": "MacBook-Pro-Ibadan-Lab",
+    "expiresAt": "2026-11-12T22:45:05.629Z",
+    "createdAt": "2026-11-05T22:45:05.630Z"
+  },
+  {
+    "id": "cmw44vo7r000esbbyc588gnio",
+    "studentId": "cmw2m77ku0000sbdib4qf9bqp",
+    "tokenHash": "d34f01b853561f821cbb405fa1ba53c6173148d90fa1f1224cebdf5b90482a21",
+    "ipAddress": "10.20.2.2",
+    "userAgent": "Android-Mobile-Chrome",
+    "expiresAt": "2026-11-12T22:45:05.750Z",
+    "createdAt": "2026-11-05T22:45:05.751Z"
+  }
+]

@@ -2,10 +2,13 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { ResetBoundarySchema } from "@/lib/server-schemas";
 import { checkRateLimit } from "@/lib/rate-limit";
+import {
+    generateVerificationCode,
+    VERIFICATION_EXPIRY_MS,
+} from "@/lib/verification";
 
 export async function POST(request: Request) {
     try {
-        // STEP 8: Password Reset Rate Limiting (3 attempts per 15 minutes per IP)
         const rateLimit = checkRateLimit(request, "reset", 3, 15 * 60 * 1000);
         if (!rateLimit.allowed) {
             return NextResponse.json(
@@ -17,8 +20,6 @@ export async function POST(request: Request) {
                     status: 429,
                     headers: {
                         "Retry-After": String(rateLimit.retryAfterSeconds),
-                        "X-RateLimit-Limit": String(rateLimit.limit),
-                        "X-RateLimit-Remaining": "0",
                     },
                 }
             );
@@ -41,18 +42,31 @@ export async function POST(request: Request) {
         }
 
         const { email } = parsed.data;
-        await prisma.student.findUnique({ where: { email } });
+        const student = await prisma.student.findUnique({ where: { email } });
 
+        if (student) {
+            const resetCode = generateVerificationCode();
+            const expiresAt = new Date(Date.now() + VERIFICATION_EXPIRY_MS);
+            await prisma.verificationCode.create({
+                data: {
+                    studentId: student.id,
+                    code: resetCode,
+                    expiresAt,
+                },
+            });
+        }
+
+        // Identical response whether email exists or not (prevents account enumeration)
         return NextResponse.json(
             {
-                message: `If an active student record matches ${email}, a recovery code has been queued.`,
+                message: `If an active student record matches ${email}, a 6-digit recovery code (valid for 8 minutes) has been dispatched.`,
                 normalisedEmail: email,
             },
             { status: 200 }
         );
     } catch {
         return NextResponse.json(
-            { error: "Internal server error during password reset." },
+            { error: "Internal server error during password reset request." },
             { status: 500 }
         );
     }
