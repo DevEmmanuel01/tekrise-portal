@@ -1,0 +1,16 @@
+=== TASK 5 STEP 5A: POSTGRESQL EXPLAIN (ANALYZE, BUFFERS) BEFORE INDEXING ===
+Timestamp  : 2026-11-05T22:58:36.730Z
+Table      : public."TuitionPaymentAttempt" (30,000 rows)
+Query      : SELECT id, "studentId", "studentEmail", "amountKobo", "providerReference", status, "attemptedAt"
+             FROM "TuitionPaymentAttempt"
+             WHERE "studentEmail" = 'bursary.target.15000@tekrise.ng';
+
+--- POSTGRESQL QUERY PLAN (UNINDEXED -> SEQUENTIAL SCAN) ---
+Seq Scan on "TuitionPaymentAttempt"  (cost=0.00..1172.00 rows=1 width=132) (actual time=1.218..2.534 rows=1.00 loops=1)
+  Filter: ("studentEmail" = 'bursary.target.15000@tekrise.ng'::text)
+  Rows Removed by Filter: 29999
+  Buffers: shared hit=797
+Planning:
+  Buffers: shared hit=9
+Planning Time: 0.060 ms
+Execution Time: 2.545 ms

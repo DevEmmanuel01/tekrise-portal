@@ -1,0 +1,17 @@
+=== TASK 5 STEP 5B: POSTGRESQL EXPLAIN (ANALYZE, BUFFERS) AFTER INDEXING ===
+Timestamp  : 2026-11-05T22:58:37.593Z
+Table      : public."TuitionPaymentAttempt" (30,000 rows)
+Index Added: CREATE INDEX "TuitionPaymentAttempt_studentEmail_idx" ON "TuitionPaymentAttempt"("studentEmail");
+Query      : SELECT id, "studentId", "studentEmail", "amountKobo", "providerReference", status, "attemptedAt"
+             FROM "TuitionPaymentAttempt"
+             WHERE "studentEmail" = 'bursary.target.15000@tekrise.ng';
+
+--- POSTGRESQL QUERY PLAN (INDEXED -> B-TREE INDEX SCAN) ---
+Index Scan using "TuitionPaymentAttempt_studentEmail_idx" on "TuitionPaymentAttempt"  (cost=0.41..8.43 rows=1 width=132) (actual time=0.031..0.031 rows=1.00 loops=1)
+  Index Cond: ("studentEmail" = 'bursary.target.15000@tekrise.ng'::text)
+  Index Searches: 1
+  Buffers: shared hit=1 read=3
+Planning:
+  Buffers: shared hit=33 read=1
+Planning Time: 0.164 ms
+Execution Time: 0.043 ms
